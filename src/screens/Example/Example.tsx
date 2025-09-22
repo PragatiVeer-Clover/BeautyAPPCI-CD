@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Button,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import { useI18n, useUser } from '@/hooks';
 import { useTheme } from '@/theme';
@@ -85,7 +92,7 @@ function Example() {
               {t('screen_example.description')}
             </Text>
           </View>
-
+          <Text>hello Pragtai Veer</Text>
           <View
             style={[
               layout.row,
