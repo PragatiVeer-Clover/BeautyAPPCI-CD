@@ -1,5 +1,4 @@
 import { useErrorBoundary } from 'react-error-boundary';
-import { useTranslation } from 'react-i18next';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import { useTheme } from '@/theme';
@@ -12,7 +11,6 @@ type Properties = {
 
 function DefaultErrorScreen({ onReset = undefined }: Properties) {
   const { colors, fonts, gutters, layout } = useTheme();
-  const { t } = useTranslation();
   const { resetBoundary } = useErrorBoundary();
 
   return (
@@ -32,10 +30,10 @@ function DefaultErrorScreen({ onReset = undefined }: Properties) {
         width={42}
       />
       <Text style={[fonts.gray800, fonts.bold, fonts.size_16]}>
-        {t('error_boundary.title')}
+        Oops! Something went wrong.
       </Text>
       <Text style={[fonts.gray800, fonts.size_12, fonts.alignCenter]}>
-        {t('error_boundary.description')}
+        We are sorry for the inconvenience. Please try again later.
       </Text>
 
       {onReset ? (
@@ -46,7 +44,7 @@ function DefaultErrorScreen({ onReset = undefined }: Properties) {
           }}
         >
           <Text style={[fonts.gray800, fonts.size_16]}>
-            {t('error_boundary.cta')}
+            Reload the screen
           </Text>
         </TouchableOpacity>
       ) : undefined}
