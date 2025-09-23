@@ -1,26 +1,31 @@
-/* eslint-disable unicorn/consistent-function-scoping */
+import type { RootScreenProps } from '@/navigation/types';
+
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Button,
+  Dimensions,
   StyleSheet,
   Text,
   View,
-  Dimensions,
 } from 'react-native';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 
 import { useUser } from '@/hooks';
+import { Paths } from '@/navigation/paths';
 import { useTheme } from '@/theme';
 
+import { AssetByVariant } from '@/components/atoms';
 import { SafeScreen } from '@/components/templates';
 
-const { width, height } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
-function OnboardingScreen() {
+function OnboardingScreen({
+  navigation,
+}: RootScreenProps<Paths.OnboardingScreen>) {
   const { useFetchOneQuery } = useUser();
-  const { colors, gutters, layout, fonts } = useTheme();
+  const { colors, fonts, gutters, layout } = useTheme();
 
   const { isError, isFetching } = useQuery({
     queryFn: () => Promise.resolve(true),
@@ -35,8 +40,7 @@ function OnboardingScreen() {
   };
 
   const finishOnboarding = () => {
-    // Navigate to Home or Auth flow
-    console.log('✅ Finished onboarding');
+    navigation.navigate(Paths.KYCForm);
   };
 
   return (
@@ -45,39 +49,45 @@ function OnboardingScreen() {
       onResetError={handleResetError}
     >
       <SwiperFlatList
-        showPagination
         paginationActiveColor={colors.red500}
         paginationDefaultColor={colors.gray200}
         paginationStyleItem={{ borderRadius: 5, height: 10, width: 10 }}
+        showPagination
       >
         {/* Slide 1 */}
-        <View style={[styles.slide]}>
-          <Text style={[fonts.size_40, fonts.gray800, fonts.bold]}>
+        <View style={[styles.slide, { backgroundColor: colors.purple100 }]}>
+          <View style={[gutters.paddingTop_80]}>
+            <AssetByVariant
+              path="girl"
+              resizeMode="cover"
+              style={{ height: 300, width: 300 }}
+            />
+          </View>
+          <Text style={[fonts.size_32, fonts.gray800, fonts.bold]}>
             Welcome to React Native BeautySnap
           </Text>
         </View>
 
         {/* Slide 2 */}
-        <View style={[styles.slide]}>
+        <View style={[styles.slide, { backgroundColor: colors.purple100 }]}>
           <Text style={styles.text}>🔵 Splash Screen 2</Text>
         </View>
 
         {/* Slide 3 */}
-        <View style={[styles.slide]}>
+        <View style={[styles.slide, { backgroundColor: colors.purple100 }]}>
           <Text style={styles.text}>🟣 Splash Screen 3</Text>
           <Button onPress={finishOnboarding} title="Get Started" />
         </View>
       </SwiperFlatList>
-
-      {/* Loader & Error UI
-      {isFetching && (
+      Loader & Error UI
+      {isFetching ? (
         <ActivityIndicator size="large" style={[gutters.marginVertical_24]} />
-      )}
-      {isError && (
+      ) : undefined}
+      {isError ? (
         <Text style={[fonts.size_16, { color: colors.red500 }]}>
           Oops! Something went wrong.
         </Text>
-      )} */}
+      ) : undefined}
     </SafeScreen>
   );
 }
@@ -95,8 +105,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 28,
     fontWeight: '600',
-    textAlign: 'center',
     marginBottom: 20,
+    textAlign: 'center',
   },
 });
 

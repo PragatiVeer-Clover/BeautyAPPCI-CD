@@ -69,6 +69,8 @@ export default tseslint.config(
         ERROR,
         { ignore: [-1, 0, 1, 2, 3, 4, 5, 6], ignoreArrayIndexes: true },
       ],
+      'perfectionist/sort-enums': OFF,
+
       'perfectionist/sort-imports': [
         'error',
         {
@@ -97,6 +99,7 @@ export default tseslint.config(
           type: 'alphabetical',
         },
       ],
+      'perfectionist/sort-object-types': OFF,
 
       'react-refresh/only-export-components': OFF,
       'react/forbid-component-props': OFF,

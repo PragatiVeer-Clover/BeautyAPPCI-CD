@@ -9,5 +9,5 @@ export type RootStackParamList = {
   [Paths.Example]: undefined;
   [Paths.OnboardingScreen]:undefined;
   [Paths.Startup]: undefined;
-  
+  [Paths.KYCForm]: undefined;
 };
