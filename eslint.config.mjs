@@ -64,7 +64,7 @@ export default tseslint.config(
       '@typescript-eslint/no-empty-function': OFF,
       '@typescript-eslint/restrict-template-expressions': OFF,
       'import/no-unresolved': OFF, // handled by TypeScript
-      'no-console': [ERROR, { allow: ['warn', 'error'] }],
+      'no-console': ['error', { allow: ['warn', 'error', 'log'] }],
       'no-magic-numbers': [
         ERROR,
         { ignore: [-1, 0, 1, 2, 3, 4, 5, 6], ignoreArrayIndexes: true },
@@ -100,7 +100,10 @@ export default tseslint.config(
         },
       ],
       'perfectionist/sort-object-types': OFF,
-
+      'perfectionist/sort-objects': [
+        'error',
+        { type: 'asc', order: 'alphabetical' },
+      ],
       'react-refresh/only-export-components': OFF,
       'react/forbid-component-props': OFF,
       'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx', '.jsx'] }],

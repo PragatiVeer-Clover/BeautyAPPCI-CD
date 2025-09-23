@@ -10,7 +10,7 @@ import {
   TextInput as RNTextInput,
 } from 'react-native';
 
-const OTP_LENGTH = 4;
+const OTP_LENGTH = 6;
 
 const OTPScreen: React.FC = () => {
   const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(''));

@@ -1,14 +1,15 @@
 import { useMutation } from '@tanstack/react-query';
+
 import { authService, SendOTPRequest, VerifyOTPRequest } from '@/services/auth';
 
 export const useAuth = () => {
   const sendOTPMutation = useMutation({
     mutationFn: (data: SendOTPRequest) => authService.sendOTP(data),
-    onSuccess: (data) => {
-      console.log('OTP sent successfully:', data);
-    },
     onError: (error) => {
       console.error('Failed to send OTP:', error);
+    },
+    onSuccess: (data) => {
+      console.log('OTP sent successfully:', data);
     },
   });
 

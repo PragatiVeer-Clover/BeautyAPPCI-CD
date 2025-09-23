@@ -51,6 +51,7 @@ function LoginWithMobile({
       phoneNumber: phoneNumber.trim(),
       countryCode: selectedCountry.dialCode,
     });
+    console.log('Data');
   };
 
   const selectCountry = (country: Country) => {
@@ -82,7 +83,7 @@ function LoginWithMobile({
             style={[
               fonts.size_16,
               { color: colors.gray200 },
-              gutters.marginBottom_8,
+              gutters.marginBottom_12,
             ]}
           >
             Phone Number
@@ -116,7 +117,7 @@ function LoginWithMobile({
         </View>
 
         <Button
-          title={sendOTPStatus.isLoading ? "Sending..." : "Send OTP"}
+          title={sendOTPStatus.isLoading ? 'Sending...' : 'Send OTP'}
           onPress={handleLogin}
           variant="primary"
           size="large"
