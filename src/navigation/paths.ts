@@ -3,4 +3,5 @@ export const enum Paths {
   OnboardingScreen= 'OnboardingScreen',
   Startup = 'startup',
   KYCForm ='KYCForm',
+  LoginWithMobile ='LoginWithMobile'
 }

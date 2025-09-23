@@ -10,4 +10,5 @@ export type RootStackParamList = {
   [Paths.OnboardingScreen]:undefined;
   [Paths.Startup]: undefined;
   [Paths.KYCForm]: undefined;
+  [Paths.LoginWithMobile]: undefined;
 };
