@@ -24,7 +24,7 @@ function Startup({ navigation }: RootScreenProps<Paths.Startup>) {
     if (isSuccess) {
       navigation.reset({
         index: 0,
-        routes: [{ name: Paths.Example }],
+        routes: [{ name: Paths.OnboardingScreen }],
       });
     }
   }, [isSuccess, navigation]);
@@ -48,7 +48,9 @@ function Startup({ navigation }: RootScreenProps<Paths.Startup>) {
           <ActivityIndicator size="large" style={[gutters.marginVertical_24]} />
         ) : undefined}
         {isError ? (
-          <Text style={[fonts.size_16, fonts.red500]}>Oops! Something went wrong.</Text>
+          <Text style={[fonts.size_16, fonts.red500]}>
+            Oops! Something went wrong.
+          </Text>
         ) : undefined}
       </View>
     </SafeScreen>
