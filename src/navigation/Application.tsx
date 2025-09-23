@@ -7,8 +7,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Paths } from '@/navigation/paths';
 import { useTheme } from '@/theme';
 
-import { Example, KYCForm, LoginWithMobile, Startup } from '@/screens';
+import { Example, KYCForm, LoginWithMobile, Startup,O } from '@/screens';
 import OnboardingScreen from '@/screens/OnboardingScreen/OnboardingScreen';
+import OTPScreen from '@/screens/OTP/OTPScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -29,6 +30,7 @@ function ApplicationNavigator() {
             component={LoginWithMobile}
             name={Paths.LoginWithMobile}
           />
+          <Stack.Screen component={OTPScreen} name={Paths.OTPScreen} />
           <Stack.Screen component={KYCForm} name={Paths.KYCForm} />
         </Stack.Navigator>
       </NavigationContainer>
