@@ -9,13 +9,15 @@ import {
   Modal,
   FlatList,
 } from 'react-native';
-import { useUser, useAuth } from '@/hooks';
+import { useUser } from '@/hooks';
 import { Paths } from '@/navigation/paths';
 import { useTheme } from '@/theme';
 
 import { Button } from '@/components/atoms';
 import countryCodes from '@/data/countryCodes.json';
 import { RootScreenProps } from '@/navigation/types';
+import axios from 'axios';
+
 type Country = {
   name: string;
   code: string;
@@ -27,13 +29,13 @@ function LoginWithMobile({
   navigation,
 }: RootScreenProps<Paths.LoginWithMobile>) {
   const { useFetchOneQuery } = useUser();
-  const { sendOTP, sendOTPStatus } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const { colors, fonts, gutters, layout } = useTheme();
   const [currentId, setCurrentId] = useState(-1);
   const [selectedCountry, setSelectedCountry] = useState<Country>(
     countryCodes[2],
   ); // Default to India
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('+919167855471');
   const [showCountryPicker, setShowCountryPicker] = useState(false);
 
   const fetchOneUserQuery = useFetchOneQuery(currentId);
@@ -41,17 +43,42 @@ function LoginWithMobile({
     void fetchOneUserQuery.refetch();
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!phoneNumber.trim()) {
       console.log('Please enter phone number');
       return;
     }
+    navigation.navigate(Paths.OTPScreen);
+    // setIsLoading(true);
 
-    sendOTP({
-      phoneNumber: phoneNumber.trim(),
-      countryCode: selectedCountry.dialCode,
-    });
-    console.log('Data');
+    // try {
+    //   const response = await axios.post(
+    //     'http://192.168.22.107:3000/api/v1/mobile-auth/send-otp',
+    //     {
+    //       phone: selectedCountry.dialCode + phoneNumber.trim(),
+    //     },
+    //     {
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //     },
+    //   );
+
+    //   console.log('OTP Response:', response.data);
+    // } catch (error: any) {
+    //   if (error.response) {
+    //     // Server responded with an error
+    //     console.error('Error Response:', error.response.data);
+    //   } else if (error.request) {
+    //     // No response received
+    //     console.error('No Response:', error.request);
+    //   } else {
+    //     // Something went wrong in setting up request
+    //     console.error('Axios Error:', error.message);
+    //   }
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   const selectCountry = (country: Country) => {
@@ -117,11 +144,11 @@ function LoginWithMobile({
         </View>
 
         <Button
-          title={sendOTPStatus.isLoading ? 'Sending...' : 'Send OTP'}
+          title={isLoading ? 'Sending...' : 'Send OTP'}
           onPress={handleLogin}
           variant="primary"
           size="large"
-          disabled={sendOTPStatus.isLoading}
+          disabled={isLoading}
           style={{ width: '100%' }}
         />
 
@@ -138,7 +165,7 @@ function LoginWithMobile({
               ]}
             >
               <Text
-                style={[fonts.bold, fonts.size_20, { color: colors.gray50 }]}
+                style={[fonts.bold, fonts.size_24, { color: colors.gray50 }]}
               >
                 Select Country
               </Text>
@@ -152,7 +179,7 @@ function LoginWithMobile({
                   style={[styles.countryItem, gutters.padding_16]}
                   onPress={() => selectCountry(item)}
                 >
-                  <Text style={[fonts.size_20]}>{item.flag}</Text>
+                  <Text style={[fonts.size_24]}>{item.flag}</Text>
                   <Text
                     style={[
                       fonts.size_16,

@@ -1,8 +1,7 @@
 import { instance } from './instance';
 
 export type SendOTPRequest = {
-  phoneNumber: string;
-  countryCode: string;
+  phone: string;
 };
 
 export type SendOTPResponse = {
@@ -30,9 +29,21 @@ export type VerifyOTPResponse = {
 
 export const authService = {
   sendOTP: async (data: SendOTPRequest): Promise<SendOTPResponse> => {
-    return instance.post('api/v1/mobile-auth/send-otp', {
-      json: data,
-    }).json<SendOTPResponse>();
+    try {
+      console.log('Sending OTP request:', data);
+      console.log('API URL:', 'http://192.168.22.107:3000/api/v1/mobile-auth/send-otp');
+      
+      const response = await instance.post('api/v1/mobile-auth/send-otp', {
+        json: data,
+      });
+      
+      const result = await response.json<SendOTPResponse>();
+      console.log('OTP Response:', result);
+      return result;
+    } catch (error) {
+      console.error('OTP API Error:', error);
+      throw error;
+    }
   },
 
   verifyOTP: async (data: VerifyOTPRequest): Promise<VerifyOTPResponse> => {

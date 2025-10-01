@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -8,13 +8,56 @@ import {
   KeyboardAvoidingView,
   Platform,
   TextInput as RNTextInput,
+  NativeModules,
+  PermissionsAndroid,
+  DeviceEventEmitter,
 } from 'react-native';
 
-const OTP_LENGTH = 6;
+const { OTPModule } = NativeModules;
 
-const OTPScreen: React.FC = () => {
+const OTP_LENGTH = 6;
+const expectedOtp = '041600';
+const length = 6;
+const indexBox = length - 1;
+
+function OTPScreen() {
   const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(''));
   const inputs = useRef<RNTextInput[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [invalid, setInvalid] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
+
+  useEffect(() => {
+    const requestSmsPermission = async () => {
+      if (Platform.OS === 'android') {
+        await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
+        );
+        await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_SMS,
+        );
+      }
+    };
+
+    const subscription = DeviceEventEmitter.addListener(
+      'OtpReceived',
+      (receivedOtp: string) => {
+        const otpArray = receivedOtp.split('');
+        setOtp(otpArray);
+        if (receivedOtp.length === length) {
+          verifyOtp(receivedOtp);
+        }
+      },
+    );
+
+    requestSmsPermission();
+    if (OTPModule) {
+      console.log('OTPModules ==>', OTPModule);
+      OTPModule.startListening();
+    }
+
+    return () => subscription.remove();
+  }, []);
 
   const handleChange = (text: string, index: number) => {
     if (/^\d$/.test(text) || text === '') {
@@ -44,6 +87,29 @@ const OTPScreen: React.FC = () => {
     }
   };
 
+  const verifyOtp = (enteredOtp: string) => {
+    setLoading(true);
+    setInvalid(false);
+
+    // Run async timer so UI stays responsive
+    setTimeout(() => {
+      if (enteredOtp === expectedOtp) {
+        setLoading(false);
+        
+        // onVerified();
+      } else {
+        setLoading(false);
+        handleInvalidOtp();
+      }
+    }, 5000); // ⏳ 5 s loader before validation
+  };
+
+  const handleInvalidOtp = () => {
+    setInvalid(true);
+    setOtp(['', '', '', '', '', '']);
+    inputRefs.current[0]?.focus();
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -71,7 +137,7 @@ const OTPScreen: React.FC = () => {
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
